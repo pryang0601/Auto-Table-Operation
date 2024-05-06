@@ -6,6 +6,7 @@ from stack import stack
 from pivot import pivot
 from transpose import transpose
 from ffill import ffill
+from subtitle import subtitle
 CURRENT_DATA = ""
 def is_json_file(file_path: str)-> bool:
     """Check whether the file is a json file"""
@@ -30,8 +31,12 @@ def perform_transpose(table_file=str, output_dir= str)-> None:
     transpose(table_file = table_file, output_dir= output_dir)
 
 def perform_ffill(table_file=str, output_dir= str)-> None:
-    """Perform transpose operation"""
+    """Perform ffill operation"""
     ffill(table_file = table_file, output_dir= output_dir)
+
+def perform_subtitle(table_file=str, output_dir= str)-> None:
+    """Perform subtitle operation"""
+    subtitle(table_file = table_file, output_dir= output_dir)
 
 def process_folder(folder_path: str, file_output: str, operation: str)-> None:
     """Iteratibe each subfolder to perform stack"""
@@ -61,6 +66,8 @@ def process_folder(folder_path: str, file_output: str, operation: str)-> None:
                     perform_transpose(table_file=CURRENT_DATA, output_dir= file_output)
                 elif operation == 'ffill':
                     perform_ffill(table_file=CURRENT_DATA, output_dir= file_output)
+                elif operation == 'subtitle':
+                    perform_subtitle(table_file=CURRENT_DATA, output_dir= file_output)
                 else:
                     pass
 def run():
@@ -69,8 +76,9 @@ def run():
     stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/stack'
     pivotpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/pivot'
     transpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/transpose'
-    ffillpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/ffill/ffill_test2'
+    ffillpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/ffill'
+    subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/subtitle'
     output = dirpath+'/Output'
-    process_folder(folder_path= ffillpath, file_output=output, operation="ffill")
+    process_folder(folder_path= ffillpath, file_output=output, operation="subtitle")
 if __name__ == '__main__':
     run()
