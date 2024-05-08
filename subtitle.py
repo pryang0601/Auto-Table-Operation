@@ -24,4 +24,4 @@ def subtitle(table_file: str, output_dir: str) -> None:
         data.iloc[index, 0] = subtitles[idx]
     data.fillna(method="ffill", inplace=True)
     data.drop(axis=0, index=indexes, inplace=True)
-    data.to_csv(f"{output_dir}/subtitle{COUNTER}.csv")
+    data.to_csv(f"{output_dir}/subtitle{COUNTER}.csv", index=False)

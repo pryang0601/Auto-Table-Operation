@@ -15,6 +15,8 @@ def pivot(table_file: str, output_dir: str) -> None:
             val = attribute_value.split(': ')[1]
             df.at[index, "Attribute"] = att
             df.at[index, "Value"] = val
+    # df_pivot = df.pivot(index=None, columns='Attribute', values='Value')
+    # pandas == 1.5.3
     df_pivot = df.pivot(index=None, columns='Attribute', values='Value').apply(
                 lambda x: pd.Series(x.dropna().to_numpy()))
     df_pivot.to_csv(f"{output_dir}/pivot{COUNTER}.csv", index=False)

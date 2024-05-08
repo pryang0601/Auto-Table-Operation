@@ -1,7 +1,7 @@
 """Module get the filepath"""
 import os
 import json
-# from natsort import natsorted
+from natsort import natsorted
 from stack import stack
 from pivot import pivot
 from transpose import transpose
@@ -59,7 +59,7 @@ def perform_explode(table_file: str, output_dir: str,
 def process_folder(folder_path: str, file_output: str, operation: str) -> None:
     """Iteratibe each subfolder to perform stack"""
     global CURRENT_DATA
-    items = sorted(os.listdir(folder_path))
+    items = natsorted(os.listdir(folder_path))
     # natsorted: 1,2,3,4,5...
     for item in items:
         item_path = os.path.join(folder_path, item)
@@ -100,14 +100,14 @@ def process_folder(folder_path: str, file_output: str, operation: str) -> None:
 def run():
     """Function to run the stack operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
-    stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/stack'
-    pivotpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/pivot'
-    transpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/transpose'
-    ffillpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/ffill'
-    subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/subtitle'
-    explodepath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack/ATBench/explode/explode_test1'
+    stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack'
+    pivotpath = dirpath+'/Auto-Tables-Benchmark/ATBench/pivot'
+    transpath = dirpath+'/Auto-Tables-Benchmark/ATBench/transpose'
+    ffillpath = dirpath+'/Auto-Tables-Benchmark/ATBench/ffill'
+    subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
+    explodepath = dirpath+'/Auto-Tables-Benchmark/ATBench/explode'
     output = dirpath+'/Output'
-    process_folder(folder_path=explodepath, file_output=output, operation="explode")
+    process_folder(folder_path=subtitlepath, file_output=output, operation="subtitle")
 
 
 if __name__ == '__main__':
