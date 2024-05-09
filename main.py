@@ -3,11 +3,11 @@ import os
 import json
 from natsort import natsorted
 from stack import stack
-from pivot import pivot
+from pivot import pivot, is_pivot
 from transpose import transpose
-from ffill import ffill
-from subtitle import subtitle
-from explode import explode
+from ffill import ffill, is_ffill
+from subtitle import subtitle, is_subtitle
+from explode import explode, is_explode
 CURRENT_DATA = ""
 
 
@@ -97,6 +97,19 @@ def process_folder(folder_path: str, file_output: str, operation: str) -> None:
                     pass
 
 
+def check_operation(table_file: str) -> str:
+    """Check what kind of operation we need to do"""
+    # The order is matter!
+    if is_explode(table_file):
+        return "explode"
+    elif is_subtitle(table_file):
+        return subtitle
+    elif is_pivot(table_file):
+        return "pivot"
+    elif is_ffill(table_file):
+        return "ffill"
+
+
 def run():
     """Function to run the stack operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
@@ -107,6 +120,7 @@ def run():
     subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
     explodepath = dirpath+'/Auto-Tables-Benchmark/ATBench/explode'
     output = dirpath+'/Output'
+    # operation = check_operation(table_path)
     process_folder(folder_path=subtitlepath, file_output=output, operation="subtitle")
 
 

@@ -3,6 +3,17 @@ import pandas as pd
 COUNTER = 0
 
 
+def is_pivot(table_file: str) -> bool:
+    """Check if it need pivot operation"""
+    data = pd.read_csv(table_file)
+    attrs = [data.columns[0]]
+    attrs.extend(list(data.iloc[:, 0]))
+    if len(attrs) > set(attrs):
+        return True
+    else:
+        return False
+
+
 def pivot(table_file: str, output_dir: str) -> None:
     """Perform pivot operation"""
     global COUNTER

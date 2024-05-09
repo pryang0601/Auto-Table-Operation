@@ -1,11 +1,29 @@
 """Module providing functions to transform tables"""
+import re
 import pandas as pd
-import math
 COUNTER = 0
 
 
+def is_composite(val: str):
+    """Check if value is composite value"""
+    date_pattern = re.compile(r'(\d{4}/\d{2}/\d{2})|(\d{2}/\d{2}/\d{4})')
+    if date_pattern.match(str(val)):
+        return False
+    else:
+        return ',' in str(val) or '/' in str(val) or "|" in str(val)
+
+
+def is_explode(table_file: str) -> bool:
+    """Check if it need explode operation"""
+    data = pd.read_csv(table_file)
+    for col in data.columns:
+        if data[col].apply(is_composite).any():
+            return True
+    return False
+
+
 def parse_string_to_list(s: str) -> list:
-    # Check if the string contains commas or slashes
+    """Check if the string contains commas or slashes"""
     if pd.isna(s):
         return s
     if ',' in s:
