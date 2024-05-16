@@ -10,12 +10,8 @@
 </ul>
 
 #### To-do:
-<ol> 
-	<li>clone the repository of <a href="https://github.com/LiPengCS/Auto-Tables-Benchmark/tree/main">the benchmark of Auto Tables</a></li>
+<ol>
 	<li>create an "Output" folder to store the tables after transformation</li>
+ 	<li>iterate "Tables" folder to check each dirty table's operation and use that operation to transform it to a clean table</li>
 
 </ol>
-
-#### Change operation:
-In main.py, change the "folderpath" and "operation" in run function.<br>
-For example, if you want to perform "stack" operation, change the "folderpath" to "stackpath", and the "operation" to "stack"
