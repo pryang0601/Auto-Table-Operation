@@ -7,8 +7,16 @@ def is_pivot(table_file: str) -> bool:
     """Check if it need pivot operation"""
     data = pd.read_csv(table_file)
     attrs = [data.columns[0]]
+    # subtitle
+    if data.iloc[0].iloc[1:].isna().all() and ':' not in attrs[0]:
+       return False
     attrs.extend(list(data.iloc[:, 0]))
-    if len(attrs) > set(attrs):
+    if ':' in attrs[0]:
+        attrs = [attr.split(':')[0] for attr in attrs]
+    # contains replicate values and doesn't contain Nan
+    num_attrs = len(attrs)
+    unique_num_attrs = len(set(attrs))
+    if num_attrs > unique_num_attrs and (num_attrs%unique_num_attrs==0) and not data.iloc[:, 0].isna().any():
         return True
     else:
         return False

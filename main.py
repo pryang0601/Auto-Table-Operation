@@ -97,21 +97,36 @@ def process_folder(folder_path: str, file_output: str, operation: str) -> None:
                     pass
 
 
-def check_operation(table_file: str) -> str:
+def check_folder_operation(folder_path: str, output_dir) -> None:
+    """Iteratibe each subfolder to check operation to perform"""
+    items = natsorted(os.listdir(folder_path))
+    for item in items:
+        item_path = os.path.join(folder_path, item)
+        if "transpose" in item_path or "stack" in item_path or "wide_to_long" in item_path:
+            continue
+        check_operation(item_path, output_dir)
+
+def check_operation(table_file: str, output_dir: str) -> None:
     """Check what kind of operation we need to do"""
     # The order is matter!
-    if is_explode(table_file):
-        return "explode"
+    if is_pivot(table_file):
+        print("pivot")
+        perform_pivot(table_file, output_dir)
     elif is_subtitle(table_file):
-        return subtitle
-    elif is_pivot(table_file):
-        return "pivot"
-    elif is_ffill(table_file):
-        return "ffill"
+        perform_subtitle(table_file, output_dir)
+        print("subtitle")
+    else:
+        idx,explode_need = is_explode(table_file)
+        if explode_need:
+            perform_explode(table_file, output_dir, idx)
+            print("explode")
+        elif is_ffill(table_file):
+            perform_ffill(table_file, output_dir)
+            print("ffill")
 
 
 def run():
-    """Function to run the stack operation"""
+    """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
     stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack'
     pivotpath = dirpath+'/Auto-Tables-Benchmark/ATBench/pivot'
@@ -120,8 +135,9 @@ def run():
     subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
     explodepath = dirpath+'/Auto-Tables-Benchmark/ATBench/explode'
     output = dirpath+'/Output'
-    # operation = check_operation(table_path)
-    process_folder(folder_path=subtitlepath, file_output=output, operation="subtitle")
+    filepath = dirpath+'/Tables'
+    operation = check_folder_operation(filepath, output) 
+   #process_folder(folder_path=pivotpath, file_output=output, operation=operation)
 
 
 if __name__ == '__main__':
