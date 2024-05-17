@@ -8,6 +8,7 @@ from transpose import transpose
 from ffill import ffill, is_ffill
 from subtitle import subtitle, is_subtitle
 from explode import explode, is_explode
+from wide_to_long import wide_to_long, is_wide_to_long
 CURRENT_DATA = ""
 
 
@@ -128,6 +129,7 @@ def check_operation(table_file: str, output_dir: str) -> None:
 def run():
     """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
+    widetolongpath = dirpath+'/Auto-Tables-Benchmark/ATBench/wide_to_long'
     output = dirpath+'/Output'
     filepath = dirpath+'/Tables'
     check_folder_operation(filepath, output)
