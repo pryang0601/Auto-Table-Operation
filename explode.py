@@ -1,7 +1,8 @@
 """Module providing functions to transform tables"""
 import re
-import pandas as pd
 import locale
+from typing import Tuple
+import pandas as pd
 COUNTER = 0
 
 
@@ -33,7 +34,7 @@ def is_composite(val: str):
         return ',' in str(val) or '/' in str(val) or "|" in str(val)
 
 
-def is_explode(table_file: str) -> (int, bool):
+def is_explode(table_file: str) -> Tuple[int, bool]:
     """Check if it need explode operation"""
     data = pd.read_csv(table_file)
     for idx,col in enumerate(data.columns):
@@ -46,7 +47,7 @@ def is_explode(table_file: str) -> (int, bool):
 
 def parse_string_to_list(s: str) -> list:
     """Check if the string contains commas or slashes"""
-    if type(s)!=str:
+    if not isinstance(s, str):
         return s
     if pd.isna(s):
         return s

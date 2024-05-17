@@ -128,15 +128,9 @@ def check_operation(table_file: str, output_dir: str) -> None:
 def run():
     """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
-    stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack'
-    pivotpath = dirpath+'/Auto-Tables-Benchmark/ATBench/pivot'
-    transpath = dirpath+'/Auto-Tables-Benchmark/ATBench/transpose'
-    ffillpath = dirpath+'/Auto-Tables-Benchmark/ATBench/ffill'
-    subtitlepath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
-    explodepath = dirpath+'/Auto-Tables-Benchmark/ATBench/explode'
     output = dirpath+'/Output'
     filepath = dirpath+'/Tables'
-    operation = check_folder_operation(filepath, output) 
+    check_folder_operation(filepath, output)
    #process_folder(folder_path=pivotpath, file_output=output, operation=operation)
 
 

@@ -8,8 +8,8 @@ def is_subtitle(table_file: str) -> bool:
     """Check if it need subtitle operation"""
     data = pd.read_csv(table_file)
     first_row = data.iloc[0]
-    isTitle = first_row.iloc[1:].isna().all()
-    return isTitle
+    is_title = first_row.iloc[1:].isna().all()
+    return is_title
 
 
 def subtitle(table_file: str, output_dir: str) -> None:
