@@ -1,6 +1,8 @@
 """Module get the filepath"""
 import os
 import json
+from typing import List
+from pathlib import Path
 from natsort import natsorted
 from stack import stack
 from pivot import pivot, is_pivot
@@ -57,6 +59,13 @@ def perform_explode(table_file: str, output_dir: str,
             explode_idx=explode_idx)
 
 
+# def perform_wide_to_long(table_file: str, output_dir: str,
+#         index: List) -> None:
+#     """Perform wide_to_long operation"""
+#     wide_to_long(table_file=table_file, output_dir=output_dir,
+#             )
+
+
 def process_folder(folder_path: str, file_output: str, operation: str) -> None:
     """Iteratibe each subfolder to perform stack"""
     global CURRENT_DATA
@@ -103,7 +112,10 @@ def check_folder_operation(folder_path: str, output_dir) -> None:
     items = natsorted(os.listdir(folder_path))
     for item in items:
         item_path = os.path.join(folder_path, item)
-        if "transpose" in item_path or "stack" in item_path or "wide_to_long" in item_path:
+        file_path = Path(item_path)
+        file_name = file_path.name
+        print(f"This file is {file_name}")
+        if "transpose" in file_name or "stack" in file_name or "wide_to_long" in file_name:
             continue
         check_operation(item_path, output_dir)
 
@@ -116,6 +128,9 @@ def check_operation(table_file: str, output_dir: str) -> None:
     elif is_subtitle(table_file):
         perform_subtitle(table_file, output_dir)
         print("subtitle")
+    # elif is_transpose(table_file):
+    #     perform_transpose(table_file, output_dir)
+    #     print("transpose")
     else:
         idx,explode_need = is_explode(table_file)
         if explode_need:
@@ -129,10 +144,11 @@ def check_operation(table_file: str, output_dir: str) -> None:
 def run():
     """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
-    widetolongpath = dirpath+'/Auto-Tables-Benchmark/ATBench/wide_to_long'
     output = dirpath+'/Output'
     filepath = dirpath+'/Tables'
     check_folder_operation(filepath, output)
+    # file = dirpath+'/Tables/transpose1.csv'
+    # print(is_transpose(file))
    #process_folder(folder_path=pivotpath, file_output=output, operation=operation)
 
 
