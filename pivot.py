@@ -10,8 +10,10 @@ def is_pivot(table_file: str) -> bool:
     # subtitle
     if data.iloc[0].iloc[1:].isna().all() and ':' not in attrs[0]:
        return False
+    if len(data.columns)>2:
+        return False
     attrs.extend(list(data.iloc[:, 0]))
-    if ':' in attrs[0]:
+    if ':' in attrs[0] and isinstance(attrs[0], str):
         attrs = [attr.split(':')[0] for attr in attrs]
     # contains replicate values and doesn't contain Nan
     num_attrs = len(attrs)
