@@ -6,7 +6,7 @@ from pathlib import Path
 from natsort import natsorted
 from stack import stack
 from pivot import pivot, is_pivot
-from transpose import transpose
+from transpose import transpose, is_transpose
 from ffill import ffill, is_ffill
 from subtitle import subtitle, is_subtitle
 from explode import explode, is_explode
@@ -115,7 +115,7 @@ def check_folder_operation(folder_path: str, output_dir) -> None:
         file_path = Path(item_path)
         file_name = file_path.name
         print(f"This file is {file_name}")
-        if "transpose" in file_name or "stack" in file_name or "wide_to_long" in file_name:
+        if "stack" in file_name or "wide_to_long" in file_name:
             continue
         check_operation(item_path, output_dir)
 
@@ -128,9 +128,6 @@ def check_operation(table_file: str, output_dir: str) -> None:
     elif is_subtitle(table_file):
         perform_subtitle(table_file, output_dir)
         print("subtitle")
-    # elif is_transpose(table_file):
-    #     perform_transpose(table_file, output_dir)
-    #     print("transpose")
     else:
         idx,explode_need = is_explode(table_file)
         if explode_need:
@@ -139,6 +136,9 @@ def check_operation(table_file: str, output_dir: str) -> None:
         elif is_ffill(table_file):
             perform_ffill(table_file, output_dir)
             print("ffill")
+        elif is_transpose(table_file):
+            perform_transpose(table_file, output_dir)
+            print("transpose")
 
 
 def run():
