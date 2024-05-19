@@ -115,42 +115,39 @@ def check_folder_operation(folder_path: str, output_dir) -> None:
         file_path = Path(item_path)
         file_name = file_path.name
         print(f"This file is {file_name}")
-        if "wide_to_long" in file_name:
-            continue
         check_operation(item_path, output_dir)
 
 def check_operation(table_file: str, output_dir: str) -> None:
     """Check what kind of operation we need to do"""
     # The order is matter!
-    wide_op = is_wide_to_long(table_file)
-    if wide_op[0]:
-        pass
-                # perform_wide_to_long(table_file, output_dir, wide_op[1])
+    if is_pivot(table_file):
+        print("pivot")
+        perform_pivot(table_file, output_dir)
+    elif is_subtitle(table_file):
+        print("subtitle")
+        perform_subtitle(table_file, output_dir)
     else:
-        stack_op = is_stack(table_file)
-        if stack_op[0]:
-            start_idx = stack_op[1]
-            end_idx = stack_op[2]
-            perform_stack(start_idx, end_idx, table_file, output_dir)
-        if is_pivot(table_file):
-            print("pivot")
-            perform_pivot(table_file, output_dir)
-        elif is_subtitle(table_file):
-            perform_subtitle(table_file, output_dir)
-            print("subtitle")
+        idx,explode_need = is_explode(table_file)
+        if explode_need:
+            perform_explode(table_file, output_dir, idx)
+            print("explode")
+        elif is_ffill(table_file):
+            perform_ffill(table_file, output_dir)
+            print("ffill")
+        elif is_transpose(table_file):
+            perform_transpose(table_file, output_dir)
+            print("transpose")
         else:
-            idx,explode_need = is_explode(table_file)
-            if explode_need:
-                perform_explode(table_file, output_dir, idx)
-                print("explode")
-            elif is_ffill(table_file):
-                perform_ffill(table_file, output_dir)
-                print("ffill")
-            elif is_transpose(table_file):
-                perform_transpose(table_file, output_dir)
-                print("transpose")
+            stack_op = is_stack(table_file)
+            if stack_op[0]:
+                print("stack")
+                start_idx = stack_op[1]
+                end_idx = stack_op[2]
+                perform_stack(start_idx, end_idx, table_file, output_dir)
             else:
-                pass
+                wide_op = is_wide_to_long(table_file)
+                if wide_op[0]:
+                    print("wide_to_long")
 
 def run():
     """Function to run the transformation operation"""
