@@ -127,15 +127,15 @@ def check_operation(table_file: str, output_dir: str) -> None:
         pass
                 # perform_wide_to_long(table_file, output_dir, wide_op[1])
     else:
-         stack_op = is_stack(table_file)
-         if stack_op[0]:
+        stack_op = is_stack(table_file)
+        if stack_op[0]:
             start_idx = stack_op[1]
             end_idx = stack_op[2]
             perform_stack(start_idx, end_idx, table_file, output_dir)
-         if is_pivot(table_file):
+        if is_pivot(table_file):
             print("pivot")
             perform_pivot(table_file, output_dir)
-         elif is_subtitle(table_file):
+        elif is_subtitle(table_file):
             perform_subtitle(table_file, output_dir)
             print("subtitle")
         else:
