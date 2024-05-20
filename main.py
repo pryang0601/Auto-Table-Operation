@@ -12,7 +12,7 @@ from subtitle import subtitle, is_subtitle
 from explode import explode, is_explode
 from wide_to_long import wide_to_long, is_wide_to_long
 CURRENT_DATA = ""
-
+ACC_NUM = 0
 
 def is_json_file(file_path: str) -> bool:
     """Check whether the file is a json file"""
@@ -29,7 +29,19 @@ def is_json_file(file_path: str) -> bool:
 def perform_stack(start: str, end: str,
                   table_file: str, output_dir: str) -> None:
     """Perform stack operation"""
-    stack(start=start, end=end, table_file=table_file, output_dir=output_dir)
+    filepath = table_file.split("/")[-2]
+    print(f"{filepath}_groundtruth: start_idx: {start}, end_idx: {end}")
+    
+    global ACC_NUM
+    if (is_stack(table_file)[0]):
+        start_col = is_stack(table_file)[1]
+        last_col = is_stack(table_file)[2]
+
+        print(f"{filepath}_predicted: start_idx{start_col}, end_idx: {last_col}")
+        if (start_col == int(start) and last_col == int(end)):
+            ACC_NUM += 1
+
+    # stack(start=start, end=end, table_file=table_file, output_dir=output_dir)
 
 
 def perform_pivot(table_file: str, output_dir: str) -> None:
@@ -85,7 +97,7 @@ def process_folder(folder_path: str, file_output: str, operation: str) -> None:
                     label = contents['label'][0]
                     stack_start_idx = label['stack_start_idx']
                     stack_end_idx = label['stack_end_idx']
-                    print(f"stack_start_idx: {stack_start_idx}, stack_end_idx: {stack_end_idx}")
+                    # print(f"stack_start_idx: {stack_start_idx}, stack_end_idx: {stack_end_idx}")
                     perform_stack(start=stack_start_idx, end=stack_end_idx,
                                   table_file=CURRENT_DATA, output_dir=file_output)
                 elif operation == 'pivot':
@@ -157,7 +169,20 @@ def run():
     check_folder_operation(filepath, output)
     # file = dirpath+'/Tables/transpose1.csv'
     # print(is_transpose(file))
-   #process_folder(folder_path=pivotpath, file_output=output, operation=operation)
+    # process_folder(folder_path=pivotpath, file_output=output, operation=operation)
+    # stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack'
+    # stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
+    output = dirpath+'/Output'
+    filepath = dirpath+'/Tables'
+    # check_folder_operation(filepath, output)
+
+    # load model for stack operation
+    # fasttext_model = None
+    # fasttext_model_path = './wiki-news-300d-1M.vec'
+    # fasttext_model = gensim.models.KeyedVectors.load_word2vec_format(fasttext_model_path)
+    
+    # process_folder(folder_path=stackpath, file_output=output, operation="stack")
+    # print(f"accuracy: {ACC_NUM}")
 
 
 if __name__ == '__main__':
