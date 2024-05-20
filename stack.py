@@ -21,10 +21,12 @@ def find_start_end_indices(data):
     def check_homogeneity(start_col):
 
         base_type = None
-        for col in range(start_col, num_cols):
+        for col in range(start_col, num_cols): # 0, 1, 2, 3 ,4
             # Check the type of each value in the column
             col_values = data.iloc[:, col].dropna()
             col_type = col_values.apply(lambda x: type(x).__name__).unique()
+            if (col_type.size == 0):
+                continue
             if len(col_type) != 1:
                 break
             current_type = col_type[0]
@@ -32,6 +34,7 @@ def find_start_end_indices(data):
             # Check if the column should be considered as int due to mixed types
             if current_type == 'str' and any(hasNumber(str(val)) for val in col_values):
                 current_type = 'int'
+                
             if base_type is None:
                 base_type = current_type
             if current_type != base_type:
@@ -43,6 +46,7 @@ def find_start_end_indices(data):
     start_col = 0
     while(True):
         last_col = check_homogeneity(start_col)
+        # print(last_col)
         if (last_col == num_cols - 1):
             break
         else:
@@ -95,7 +99,7 @@ def is_stack(table_file: str) -> list: # return [isstack, predicted_start_index,
     # print(f"{filepath} predicted: {start_col}, {last_col}")
 
 
-    if (last_col - start_col) < 1:
+    if (last_col - start_col + 1) < 2:
         return [False]
     else:
         return [True, start_col, last_col]
