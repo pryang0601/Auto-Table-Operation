@@ -29,19 +29,7 @@ def is_json_file(file_path: str) -> bool:
 def perform_stack(start: str, end: str,
                   table_file: str, output_dir: str) -> None:
     """Perform stack operation"""
-    filepath = table_file.split("/")[-2]
-    print(f"{filepath}_groundtruth: start_idx: {start}, end_idx: {end}")
-    
-    global ACC_NUM
-    if (is_stack(table_file)[0]):
-        start_col = is_stack(table_file)[1]
-        last_col = is_stack(table_file)[2]
-
-        print(f"{filepath}_predicted: start_idx{start_col}, end_idx: {last_col}")
-        if (start_col == int(start) and last_col == int(end)):
-            ACC_NUM += 1
-
-    # stack(start=start, end=end, table_file=table_file, output_dir=output_dir)
+    stack(start=start, end=end, table_file=table_file, output_dir=output_dir)
 
 
 def perform_pivot(table_file: str, output_dir: str) -> None:
@@ -131,6 +119,7 @@ def check_folder_operation(folder_path: str, output_dir) -> None:
 
 def check_operation(table_file: str, output_dir: str) -> None:
     """Check what kind of operation we need to do"""
+
     # The order is matter!
     if is_pivot(table_file):
         print("pivot")
@@ -170,19 +159,7 @@ def run():
     # file = dirpath+'/Tables/transpose1.csv'
     # print(is_transpose(file))
     # process_folder(folder_path=pivotpath, file_output=output, operation=operation)
-    # stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/stack'
-    # stackpath = dirpath+'/Auto-Tables-Benchmark/ATBench/subtitle'
-    output = dirpath+'/Output'
-    filepath = dirpath+'/Tables'
     # check_folder_operation(filepath, output)
-
-    # load model for stack operation
-    # fasttext_model = None
-    # fasttext_model_path = './wiki-news-300d-1M.vec'
-    # fasttext_model = gensim.models.KeyedVectors.load_word2vec_format(fasttext_model_path)
-    
-    # process_folder(folder_path=stackpath, file_output=output, operation="stack")
-    # print(f"accuracy: {ACC_NUM}")
 
 
 if __name__ == '__main__':
