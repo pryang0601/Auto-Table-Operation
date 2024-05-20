@@ -13,16 +13,22 @@ from subtitle import is_subtitle
 from explode import is_explode
 from wide_to_long import is_wide_to_long
 start_time = time.time()
-perms = list(permutations(["stack", "pivot", "transpose", "ffill", "subtitle", "explode", "wide_to_long"]))
+first_four_ops = ["pivot", "ffill", "subtitle", "explode"]
+last_three_ops = ["wide_to_long", "stack", "transpose"]
+first_permutations = list(permutations(first_four_ops))
+last_permutations = list(permutations(last_three_ops))
+# Combine the two sets of permutations
 candidates = [
-    item for item in list(perms)
-    if item.index("transpose") == 6 and item.index("stack") >= item.index("wide_to_long")
+    first + last
+    for first in first_permutations
+    for last in last_permutations
+    if last.index("stack") > last.index("wide_to_long")
 ]
 print(len(candidates))
 accuracy = []
 def extract_prefix(filename):
     """get the operation according to the filename"""
-    pattern = r'^([a-zA-Z]+)\d+\.csv$'
+    pattern = r'^([a-zA-Z_]+)\d+\.csv$'
     match = re.match(pattern, filename)
     if match:
         return match.group(1)
@@ -51,8 +57,12 @@ def check_accuracy(folder_path: str) -> None:
             ground_truth = extract_prefix(file_name)
             operations = []
             for c in candidate:
-                if operations_map[c](item_path):
-                    operations.append(c)
+                if c == "stack" or c == "wide_to_long":
+                    if operations_map[c](item_path)[0]:
+                        operations.append(c)
+                else:
+                    if operations_map[c](item_path):
+                        operations.append(c)
                 if len(operations)==2:
                     break
             if ground_truth in operations:
@@ -64,7 +74,6 @@ def check_accuracy(folder_path: str) -> None:
 dirpath = os.path.dirname(os.path.abspath(__file__))
 filepath = dirpath+'/Tables'
 check_accuracy(filepath)
-print("Accuracy: ", accuracy)
 max_accuracy = max(accuracy, key=lambda x:x["Accuracy"])
 print("Max Accuracy: ", max_accuracy)
 end_time = time.time()
