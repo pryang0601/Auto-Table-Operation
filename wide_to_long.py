@@ -174,8 +174,6 @@ def find_longest_subsequence(schema_list, final_patterns):
     # Return the start and end indices of the longest subsequence
     return start_idx, end_idx
 
-
-
 def is_wide_to_long(table_file: str) -> bool:
     """Check if it need wide_to_long operation"""
     data = pd.read_csv(table_file)

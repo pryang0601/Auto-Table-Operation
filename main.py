@@ -14,6 +14,17 @@ from explode import explode, is_explode
 from wide_to_long import wide_to_long, is_wide_to_long
 CURRENT_DATA = ""
 
+def is_json_file(file_path: str) -> bool:
+    """Check whether the file is a json file"""
+    if file_path.endswith('.json'):
+        try:
+            with open(file_path, 'r', encoding="utf-8") as file:
+                json.load(file)
+            return True
+        except (json.JSONDecodeError, FileNotFoundError):
+            pass
+    return False
+
 
 def perform_stack(start: str, end: str,
                   table_file: str, output_dir: str) -> None:
