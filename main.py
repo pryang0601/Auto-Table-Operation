@@ -4,6 +4,7 @@ import json
 from typing import List
 from pathlib import Path
 from natsort import natsorted
+import mysql.connector
 from stack import stack, is_stack
 from pivot import pivot, is_pivot
 from transpose import transpose, is_transpose
@@ -12,18 +13,6 @@ from subtitle import subtitle, is_subtitle
 from explode import explode, is_explode
 from wide_to_long import wide_to_long, is_wide_to_long
 CURRENT_DATA = ""
-ACC_NUM = 0
-
-def is_json_file(file_path: str) -> bool:
-    """Check whether the file is a json file"""
-    if file_path.endswith('.json'):
-        try:
-            with open(file_path, 'r', encoding="utf-8") as file:
-                json.load(file)
-            return True
-        except (json.JSONDecodeError, FileNotFoundError):
-            pass
-    return False
 
 
 def perform_stack(start: str, end: str,
@@ -107,7 +96,7 @@ def process_folder(folder_path: str, file_output: str, operation: str) -> None:
                     pass
 
 
-def check_folder_operation(folder_path: str, output_dir) -> None:
+def check_folder_operation(folder_path: str) -> None:
     """Iteratibe each subfolder to check operation to perform"""
     items = natsorted(os.listdir(folder_path))
     for item in items:
@@ -115,47 +104,40 @@ def check_folder_operation(folder_path: str, output_dir) -> None:
         file_path = Path(item_path)
         file_name = file_path.name
         print(f"This file is {file_name}")
-        check_operation(item_path, output_dir)
+        check_operation(item_path)
 
-def check_operation(table_file: str, output_dir: str) -> None:
+
+def check_operation(table_file: str) -> List:
     """Check what kind of operation we need to do"""
-
-    # The order is matter!
-    if is_pivot(table_file):
-        print("pivot")
-        perform_pivot(table_file, output_dir)
-    elif is_subtitle(table_file):
-        print("subtitle")
-        perform_subtitle(table_file, output_dir)
-    else:
-        idx,explode_need = is_explode(table_file)
-        if explode_need:
-            perform_explode(table_file, output_dir, idx)
-            print("explode")
-        elif is_ffill(table_file):
-            perform_ffill(table_file, output_dir)
-            print("ffill")
-        elif is_transpose(table_file):
-            perform_transpose(table_file, output_dir)
-            print("transpose")
+    operations_map = {
+        "pivot": is_pivot,
+        "ffill": is_ffill,
+        "subtitle": is_subtitle,
+        "explode": is_explode,
+        "wide_to_long": is_wide_to_long,
+        "stack": is_stack,
+        "transpose": is_transpose
+    }
+    candidates = list(operations_map.keys())
+    operations = []
+    for candidate in candidates:
+        if candidate == "stack" or candidate == "wide_to_long":
+            if operations_map[candidate](table_file)[0]:
+                operations.append(candidate)
         else:
-            stack_op = is_stack(table_file)
-            if stack_op[0]:
-                print("stack")
-                start_idx = stack_op[1]
-                end_idx = stack_op[2]
-                perform_stack(start_idx, end_idx, table_file, output_dir)
-            else:
-                wide_op = is_wide_to_long(table_file)
-                if wide_op[0]:
-                    print("wide_to_long")
+            if operations_map[candidate](table_file):
+                operations.append(candidate)
+        if len(operations) == 2:
+            break
+    return operations
+
 
 def run():
     """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
     output = dirpath+'/Output'
     filepath = dirpath+'/Tables'
-    check_folder_operation(filepath, output)
+    check_folder_operation(filepath)
     # file = dirpath+'/Tables/transpose1.csv'
     # print(is_transpose(file))
     # process_folder(folder_path=pivotpath, file_output=output, operation=operation)
