@@ -10,6 +10,7 @@ def evaluate_permutation(folder_path: str, permutation: list) -> float:
     total_file = 0
     for item in items:
         item_path = os.path.join(folder_path, item)
+        # print(item_path)
         file_path = Path(item_path)
         file_name = file_path.name
         candidate = []
@@ -37,11 +38,11 @@ def evaluate_permutation(folder_path: str, permutation: list) -> float:
     acc = hit / total_file
     return acc
         
-
 def main():
     """Function to run the transformation operation"""
     dirpath = os.path.dirname(os.path.abspath(__file__))
     filepath = dirpath+'/Tables'
+    # print(filepath)
 
     # List of function references
     functions = [[is_pivot, "pivot"], 

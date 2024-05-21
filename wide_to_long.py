@@ -127,7 +127,7 @@ def get_patterns(schema_list: list) -> bool:
         # Filter the most common patterns by schema
         final_patterns = filter_patterns_by_schema(schema_list, most_common_patterns)
         # Print the final patterns
-        print("【final_patterns】 : " + str(final_patterns))
+        # print("【final_patterns】 : " + str(final_patterns))
     else:
         # If no clean patterns, set final_patterns to clean_patterns (which would be an empty list)
         final_patterns = clean_patterns

@@ -12,7 +12,6 @@ from subtitle import subtitle, is_subtitle
 from explode import explode, is_explode
 from wide_to_long import wide_to_long, is_wide_to_long
 CURRENT_DATA = ""
-ACC_NUM = 0
 
 def is_json_file(file_path: str) -> bool:
     """Check whether the file is a json file"""

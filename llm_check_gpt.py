@@ -12,7 +12,7 @@ def is_pivot_gpt(table_file: str, head_num: int = 8, model: str = "gpt-4-turbo")
 
     result_string = result_string.to_csv(index=False, header=True).strip()
 
-    print(prompt["pivot"] + str(result_string))
+    # print(prompt["pivot"] + str(result_string))
 
     client = OpenAI()
 
@@ -24,7 +24,7 @@ def is_pivot_gpt(table_file: str, head_num: int = 8, model: str = "gpt-4-turbo")
         {"role": "user", "content": prompt["pivot"] + str(result_string)}
       ]
     )
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True), (False)
 
 def is_stack_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-turbo"):
@@ -50,7 +50,7 @@ def is_stack_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-turbo")
       ]
     )
 
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True, [start_idx, end_idx]), (False, [])
 
 def is_wide_to_long_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-turbo"):
@@ -76,7 +76,7 @@ def is_wide_to_long_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-
       ]
     )
 
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True, [start_idx, end_idx]), (False, [])
 
 def is_transpose_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo") -> bool:
@@ -102,7 +102,7 @@ def is_transpose_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-tu
         {"role": "user", "content": prompt["transpose"] + str(result_string)}
       ]
     )
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True), (False)
 
 
@@ -129,7 +129,7 @@ def is_explode_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turb
         {"role": "user", "content": prompt["explode"] + str(result_string)}
       ]
     )
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True), (False)
 
 def is_ffill_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo") -> bool:
@@ -155,7 +155,7 @@ def is_ffill_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo"
         {"role": "user", "content": prompt["ffill"] + str(result_string)}
       ]
     )
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True), (False)
 
 def is_subtitle_gpt(table_file: str, head_num: int = 3, model: str = "gpt-4-turbo") -> bool:
@@ -181,7 +181,7 @@ def is_subtitle_gpt(table_file: str, head_num: int = 3, model: str = "gpt-4-turb
         {"role": "user", "content": prompt["subtitle"] + str(result_string)}
       ]
     )
-    print(completion.choices[0].message.content)
+    # print(completion.choices[0].message.content)
     return completion.choices[0].message.content #(True), (False)
 
 # is_subtitle_gpt("Tables/subtitle1.csv")
