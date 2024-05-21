@@ -1,44 +1,187 @@
 from openai import OpenAI
-client = OpenAI()
+import pandas as pd
+from prompt import prompt
 
-completion = client.chat.completions.create(
-  model="gpt-4",
-  
-  messages=[
-    {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
-    {"role": "user", "content": """
+def is_pivot_gpt(table_file: str, head_num: int = 8, model: str = "gpt-4-turbo") -> bool:
     
-    One type of unclean table is called subtitle, which mainly refers to tables where the second row has values only in the first element, with the rest being missing values.
+    """Check if it need pivot operation using GPT4"""
 
-    For example, consider the following table:
+    data = pd.read_csv(table_file)
 
-    Common Name (click for description),Moisture Requirement,Deer Resistant?
-    FERNS,,
-    Christmas Fern,0.0,0.0
-    Cinnamon Fern,1.0,0.0
-    Hay-scented Fern,0.0,0.0
-    Lady Fern,2.0,0.0
+    result_string = data.head(head_num)
 
-    In this example, the second row has values only in the first element, with the rest being missing values, so it is of the subtitle type.
+    result_string = result_string.to_csv(index=False, header=True).strip()
 
-    Now, I would like you to determine whether the following table is of the subtitle type. I will provide the table for you.
+    print(prompt["pivot"] + str(result_string))
 
-    Please output according to the following rules, and only respond with the content inside the parentheses () without any additional output:
+    client = OpenAI()
 
-    For tables with the subtitle type: (True)
-    For tables without the subtitle type: (False)
+    completion = client.chat.completions.create(
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["pivot"] + str(result_string)}
+      ]
+    )
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True), (False)
 
-    Input table:
+def is_stack_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-turbo"):
+    
+    """Check if it need stack operation using GPT4"""
 
-    Institution,Specific Graduate Program,Minimum Score Requirement,Restrictions,City,State
-    "Adelphi University, Garden City",,,,,
-    ,0,0.0,,Garden City,0
-    Alfred University,,,,,
-    ,Master of Fine Arts,1.0,,Alfred,0
-    Alverno College,,,,,
+    data = pd.read_csv(table_file)
 
-    """}
-  ]
-)
+    result_string = data.head(head_num)
 
-print(completion.choices[0].message.content)
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    # print(prompt["stack"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["stack"] + str(result_string)}
+      ]
+    )
+
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True, [start_idx, end_idx]), (False, [])
+
+def is_wide_to_long_gpt(table_file: str, head_num: int = 2, model: str = "gpt-4-turbo"):
+    
+    """Check if it need wide_to_long operation using GPT4"""
+
+    data = pd.read_csv(table_file)
+
+    result_string = data.head(head_num)
+
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    # print(prompt["wide_to_long"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["wide_to_long"] + str(result_string)}
+      ]
+    )
+
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True, [start_idx, end_idx]), (False, [])
+
+def is_transpose_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo") -> bool:
+    
+    """Check if it need transpose operation using GPT4"""
+
+    data = pd.read_csv(table_file)
+
+    result_string = data.head(head_num)
+
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    print(prompt["transpose"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["transpose"] + str(result_string)}
+      ]
+    )
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True), (False)
+
+
+def is_explode_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo") -> bool:
+    
+    """Check if it need explode operation using GPT4"""
+
+    data = pd.read_csv(table_file)
+
+    result_string = data.head(head_num)
+
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    print(prompt["explode"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["explode"] + str(result_string)}
+      ]
+    )
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True), (False)
+
+def is_ffill_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo") -> bool:
+    
+    """Check if it need ffill operation using GPT4"""
+
+    data = pd.read_csv(table_file)
+
+    result_string = data.head(head_num)
+
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    print(prompt["ffill"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["ffill"] + str(result_string)}
+      ]
+    )
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True), (False)
+
+def is_subtitle_gpt(table_file: str, head_num: int = 3, model: str = "gpt-4-turbo") -> bool:
+    
+    """Check if it need subtitle operation using GPT4"""
+
+    data = pd.read_csv(table_file)
+
+    result_string = data.head(head_num)
+
+    result_string = result_string.to_csv(index=False, header=True).strip()
+
+    print(prompt["subtitle"] + str(result_string))
+
+    client = OpenAI()
+
+    completion = client.chat.completions.create(
+      
+      model=model,
+      
+      messages=[
+        {"role": "system", "content": "You are an expert at detecting whether a table is clean."},
+        {"role": "user", "content": prompt["subtitle"] + str(result_string)}
+      ]
+    )
+    print(completion.choices[0].message.content)
+    return completion.choices[0].message.content #(True), (False)
+
+# is_subtitle_gpt("Tables/subtitle1.csv")
