@@ -13,6 +13,7 @@ def evaluate_permutation(folder_path: str, permutation: list) -> float:
         # print(item_path)
         file_path = Path(item_path)
         file_name = file_path.name
+        
         candidate = []
 
         # calculate candidate
