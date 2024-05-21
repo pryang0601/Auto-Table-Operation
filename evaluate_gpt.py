@@ -14,7 +14,7 @@ def evaluate_gpt(folder_path: str, functions) -> float:
         file_path = Path(item_path)
         file_name = file_path.name
         candidate = []
-        print(f"file: {item_path}")
+        # print(f"file: {item_path}")
         # calculate candidate
         for func, operation in functions:
 
