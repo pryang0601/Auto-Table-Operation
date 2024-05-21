@@ -89,7 +89,7 @@ def is_transpose_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-tu
 
     result_string = result_string.to_csv(index=False, header=True).strip()
 
-    print(prompt["transpose"] + str(result_string))
+    # print(prompt["transpose"] + str(result_string))
 
     client = OpenAI()
 
@@ -116,7 +116,7 @@ def is_explode_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turb
 
     result_string = result_string.to_csv(index=False, header=True).strip()
 
-    print(prompt["explode"] + str(result_string))
+    # print(prompt["explode"] + str(result_string))
 
     client = OpenAI()
 
@@ -142,7 +142,7 @@ def is_ffill_gpt(table_file: str, head_num: int = 12, model: str = "gpt-4-turbo"
 
     result_string = result_string.to_csv(index=False, header=True).strip()
 
-    print(prompt["ffill"] + str(result_string))
+    # print(prompt["ffill"] + str(result_string))
 
     client = OpenAI()
 
@@ -168,7 +168,7 @@ def is_subtitle_gpt(table_file: str, head_num: int = 3, model: str = "gpt-4-turb
 
     result_string = result_string.to_csv(index=False, header=True).strip()
 
-    print(prompt["subtitle"] + str(result_string))
+    # print(prompt["subtitle"] + str(result_string))
 
     client = OpenAI()
 
