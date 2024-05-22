@@ -3,8 +3,7 @@ import pandas as pd
 import os
 from difflib import SequenceMatcher
 import re
-
-COUNTER = 0
+from pathlib import Path
 
 def similar(a, b):
     """Compute similarity between two strings using SequenceMatcher."""
@@ -102,20 +101,20 @@ def is_stack(table_file: str) -> list: # return [isstack, predicted_start_index,
     if (last_col - start_col + 1) < 2:
         return [False]
     else:
-        return [True, start_col, last_col]
+        return [True, [start_col, last_col]]
 
 
 
 def stack(start: int, end: int, table_file: str, output_dir: str) -> None:
     """Perform stack operation"""
-    global COUNTER
-    COUNTER += 1
     data = pd.read_csv(table_file)
+    file_path = Path(table_file)
+    file_name = file_path.name
     start_index = start
     end_index = end
     columns = data.columns
     data = data.melt(id_vars=columns[:start_index],
                      value_vars=columns[start_index: end_index+1])
-    data.to_csv(f"{output_dir}/stack{COUNTER}.csv", index=False)
+    data.to_csv(f"{output_dir}/{file_name}", index=False)
 
 

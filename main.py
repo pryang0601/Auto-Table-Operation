@@ -70,47 +70,6 @@ def perform_explode(table_file: str, output_dir: str,
 #             )
 
 
-def process_folder(folder_path: str, file_output: str, operation: str) -> None:
-    """Iteratibe each subfolder to perform stack"""
-    global CURRENT_DATA
-    items = natsorted(os.listdir(folder_path))
-    # natsorted: 1,2,3,4,5...
-    for item in items:
-        item_path = os.path.join(folder_path, item)
-        if os.path.isdir(item_path):
-            process_folder(item_path, file_output, operation)
-        else:
-            if os.path.basename(item_path) == 'data.csv':
-                CURRENT_DATA = item_path
-            if is_json_file(item_path):
-                if operation == 'stack':
-                    with open(item_path, 'r', encoding="utf-8") as j:
-                        contents = json.loads(j.read())
-                    label = contents['label'][0]
-                    stack_start_idx = label['stack_start_idx']
-                    stack_end_idx = label['stack_end_idx']
-                    # print(f"stack_start_idx: {stack_start_idx}, stack_end_idx: {stack_end_idx}")
-                    perform_stack(start=stack_start_idx, end=stack_end_idx,
-                                  table_file=CURRENT_DATA, output_dir=file_output)
-                elif operation == 'pivot':
-                    perform_pivot(table_file=CURRENT_DATA, output_dir=file_output)
-                elif operation == 'transpose':
-                    perform_transpose(table_file=CURRENT_DATA, output_dir=file_output)
-                elif operation == 'ffill':
-                    perform_ffill(table_file=CURRENT_DATA, output_dir=file_output)
-                elif operation == 'subtitle':
-                    perform_subtitle(table_file=CURRENT_DATA, output_dir=file_output)
-                elif operation == 'explode':
-                    with open(item_path, 'r', encoding="utf-8") as j:
-                        contents = json.loads(j.read())
-                    label = contents['label'][0]
-                    explode_idx = label['explode_column_idx']
-                    print(f"explode_column_idx: {explode_idx}")
-                    perform_explode(table_file=CURRENT_DATA, output_dir=file_output, explode_idx=explode_idx)
-                else:
-                    pass
-
-
 def check_folder_operation(folder_path: str) -> None:
     """Iteratibe each subfolder to check operation to perform"""
     items = natsorted(os.listdir(folder_path))
@@ -136,9 +95,10 @@ def check_operation(table_file: str) -> List:
     candidates = list(operations_map.keys())
     operations = []
     for candidate in candidates:
-        if candidate == "stack" or candidate == "wide_to_long":
-            if operations_map[candidate](table_file)[0]:
-                operations.append(candidate)
+        if candidate == "stack" or candidate == "wide_to_long" or candidate == "explode":
+            res = operations_map[candidate](table_file)
+            if res[0]:
+                operations.append([candidate, res[1]])
         else:
             if operations_map[candidate](table_file):
                 operations.append(candidate)

@@ -34,15 +34,15 @@ def is_composite(val: str):
         return ',' in str(val) or '/' in str(val) or "|" in str(val)
 
 
-def is_explode(table_file: str) -> Tuple[int, bool]:
+def is_explode(table_file: str) -> Tuple[bool, list]:
     """Check if it need explode operation"""
     data = pd.read_csv(table_file)
     for idx,col in enumerate(data.columns):
         if "," in col or "/" in col or "|" in col:
             continue
         if data[col].apply(is_composite).any():
-            return idx, True
-    return -1, False
+            return True, [idx]
+    return False, -1
 
 
 def parse_string_to_list(s: str) -> list:
