@@ -192,11 +192,24 @@ def is_wide_to_long(table_file: str) -> bool:
 
 def wide_to_long(table_file: str, start: int, end: int, pat: list, output_dir: str) -> None:
     """Perform wide-to-long operation"""
-    file_path = Path(table_file)
-    file_name = file_path.name
-    print(table_file, start, end, pat, output_dir)
-    df = pd.read_csv(table_file, header=None)
+    global COUNTER
 
-    df = pd.wide_to_long(df, stubnames = pat, i=df.index, j="new attribute")
+    COUNTER += 1
+
+    df = pd.read_csv(table_file)
+
+    df['id'] = df.index
+
+    next_char = ''
+
+    for col in df.columns.values:
+        index = col.find(pat[0])
+        if index != -1:
+            if index + len(pat[0]) < len(col):
+                next_char = col[index + len(pat[0])]
+                # print(f"The next character after '{pat[0]}' in '{col}' is '{next_char}'.")
+            break
     
-    df.to_csv(f"{output_dir}/{file_name}", index=False)
+    df = pd.wide_to_long(df, stubnames = pat, i = 'id', j = 'new_attribute', sep = next_char)
+    
+    df.to_csv(f"{output_dir}/wide_to_long{COUNTER}.csv", index=True)
