@@ -3,7 +3,7 @@ import re
 import locale
 from typing import Tuple
 import pandas as pd
-COUNTER = 0
+from pathlib import Path
 
 
 def is_locale_number(value):
@@ -61,11 +61,9 @@ def parse_string_to_list(s: str) -> list:
 
 def explode(table_file: str, output_dir: str, explode_idx: int) -> None:
     """Perform subtitle operation"""
-    global COUNTER
-    COUNTER += 1
     data = pd.read_csv(table_file)
+    file_path = Path(table_file)
+    file_name = file_path.name
     data.iloc[:, explode_idx] = data.iloc[:, explode_idx].map(parse_string_to_list)
-    # print(data.iloc[:,explode_idx])
     data = data.explode(data.columns[explode_idx])
-   # print(data.iloc[:,explode_idx])
-    data.to_csv(f"{output_dir}/explode{COUNTER}.csv", index=False)
+    data.to_csv(f"{output_dir}/{file_name}", index=False)

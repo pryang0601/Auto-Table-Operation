@@ -1,7 +1,6 @@
 """Module providing functions to transform tables"""
 import pandas as pd
-from explode import is_explode
-COUNTER = 0
+from pathlib import Path
 
 
 def is_ffill(table_file: str) -> bool:
@@ -13,24 +12,17 @@ def is_ffill(table_file: str) -> bool:
     for column in data.columns:
         # Check if the column contains any NaN values
         if data[column].isna().any():
-            # print(f"Column '{column}' contains NaN values.")
-            #idx, explode = is_explode(table_file)
-            # print(idx)
-            #if explode == True:
-             #   isnan = False
-            #else:
             isnan = True
-
             break
     return isnan
 
 
 def ffill(table_file: str, output_dir: str) -> None:
     """Perform ffill operation"""
-    global COUNTER
-    COUNTER += 1
     data = pd.read_csv(table_file)
+    file_path = Path(table_file)
+    file_name = file_path.name
     except_col = ['price', 'description', 'release']
     cols_ffill = [idx for idx,col in enumerate(data.columns) if col.lower() not in except_col]
     data.iloc[:,cols_ffill] = data.iloc[:,cols_ffill].ffill()
-    data.to_csv(f"{output_dir}/ffill{COUNTER}.csv", index=False)
+    data.to_csv(f"{output_dir}/{file_name}", index=False)

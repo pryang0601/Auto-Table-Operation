@@ -2,7 +2,7 @@
 import pandas as pd
 from collections import defaultdict
 import re
-COUNTER = 0
+from pathlib import Path
 
 def find_patterns(schema_list, min_common_length=2):
     # Create a list of column names
@@ -188,16 +188,15 @@ def is_wide_to_long(table_file: str) -> bool:
 
     start_idx, end_idx = find_longest_subsequence(schema_list, patterns)
 
-    return (True, [start_idx, end_idx])
+    return (True, [start_idx, end_idx, patterns])
 
 def wide_to_long(table_file: str, start: int, end: int, pat: list, output_dir: str) -> None:
     """Perform wide-to-long operation"""
-    global COUNTER
-
-    COUNTER += 1
-
+    file_path = Path(table_file)
+    file_name = file_path.name
+    print(table_file, start, end, pat, output_dir)
     df = pd.read_csv(table_file, header=None)
 
-    df = pd.wide_to_long(df, stubnames = pat)
+    df = pd.wide_to_long(df, stubnames = pat, i=df.index, j="new attribute")
     
-    df.to_csv(f"{output_dir}/wide_to_long{COUNTER}.csv", index=False)
+    df.to_csv(f"{output_dir}/{file_name}", index=False)

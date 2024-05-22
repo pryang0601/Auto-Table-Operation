@@ -1,6 +1,6 @@
 """Module providing functions to transform tables"""
 import pandas as pd
-COUNTER = 0
+from pathlib import Path
 
 
 def is_transpose(table_file: str) -> bool:
@@ -30,9 +30,9 @@ def is_transpose(table_file: str) -> bool:
 
 def transpose(table_file: str, output_dir: str) -> None:
     """Perform transpose operation"""
-    global COUNTER
-    COUNTER += 1
+    file_path = Path(table_file)
+    file_name = file_path.name
     df = pd.read_csv(table_file, header=None)
     index = df.columns.values[0]
     df_t = df.set_index(index).T
-    df_t.to_csv(f"{output_dir}/transpose{COUNTER}.csv", index=False)
+    df_t.to_csv(f"{output_dir}/{file_name}", index=False)

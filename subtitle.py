@@ -1,7 +1,7 @@
 """Module providing functions to transform tables"""
 import pandas as pd
 import numpy as np
-COUNTER = 0
+from pathlib import Path
 
 
 def is_subtitle(table_file: str) -> bool:
@@ -14,8 +14,8 @@ def is_subtitle(table_file: str) -> bool:
 
 def subtitle(table_file: str, output_dir: str) -> None:
     """Perform subtitle operation"""
-    global COUNTER
-    COUNTER += 1
+    file_path = Path(table_file)
+    file_name = file_path.name
     data = pd.read_csv(table_file)
     columns = data.columns
     # drop empty columns
@@ -32,4 +32,4 @@ def subtitle(table_file: str, output_dir: str) -> None:
         data.iloc[index, 0] = subtitles[idx]
     data.fillna(method="ffill", inplace=True)
     data.drop(axis=0, index=indexes, inplace=True)
-    data.to_csv(f"{output_dir}/subtitle{COUNTER}.csv", index=False)
+    data.to_csv(f"{output_dir}/{file_name}", index=False)

@@ -63,13 +63,6 @@ def perform_explode(table_file: str, output_dir: str,
             explode_idx=explode_idx)
 
 
-# def perform_wide_to_long(table_file: str, output_dir: str,
-#         index: List) -> None:
-#     """Perform wide_to_long operation"""
-#     wide_to_long(table_file=table_file, output_dir=output_dir,
-#             )
-
-
 def check_folder_operation(folder_path: str) -> None:
     """Iteratibe each subfolder to check operation to perform"""
     items = natsorted(os.listdir(folder_path))

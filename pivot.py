@@ -1,6 +1,6 @@
 """Module providing functions to transform tables"""
 import pandas as pd
-COUNTER = 0
+from pathlib import Path
 
 
 def is_pivot(table_file: str) -> bool:
@@ -26,8 +26,8 @@ def is_pivot(table_file: str) -> bool:
 
 def pivot(table_file: str, output_dir: str) -> None:
     """Perform pivot operation"""
-    global COUNTER
-    COUNTER += 1
+    file_path = Path(table_file)
+    file_name = file_path.name
     df = pd.read_csv(table_file, header=None, names=["Attribute", "Value"])
     if ':' in df.iloc[[0]]["Attribute"].values[0]:
         for index, row in df.iterrows():
@@ -40,4 +40,4 @@ def pivot(table_file: str, output_dir: str) -> None:
     # pandas == 1.5.3
     df_pivot = df.pivot(index=None, columns='Attribute', values='Value').apply(
                 lambda x: pd.Series(x.dropna().to_numpy()))
-    df_pivot.to_csv(f"{output_dir}/pivot{COUNTER}.csv", index=False)
+    df_pivot.to_csv(f"{output_dir}/{file_name}", index=False)
