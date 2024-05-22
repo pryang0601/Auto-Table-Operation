@@ -25,6 +25,10 @@ def is_json_file(file_path: str) -> bool:
             pass
     return False
 
+def perform_wide_to_long(start: str, end: str, pat: list,
+                  table_file: str, output_dir: str) -> None:
+    """Perform wide_to_long operation"""
+    wide_to_long(table_file, start, end, pat, output_dir)
 
 def perform_stack(start: str, end: str,
                   table_file: str, output_dir: str) -> None:

@@ -190,7 +190,7 @@ def is_wide_to_long(table_file: str) -> bool:
 
     return (True, [start_idx, end_idx])
 
-def wide_to_long(table_file: str, output_dir: str) -> None:
+def wide_to_long(table_file: str, start: int, end: int, pat: list, output_dir: str) -> None:
     """Perform wide-to-long operation"""
     global COUNTER
 
@@ -198,8 +198,6 @@ def wide_to_long(table_file: str, output_dir: str) -> None:
 
     df = pd.read_csv(table_file, header=None)
 
-    index = df.columns.values[0]
-
-    df_t = df.set_index(index).T
+    df = pd.wide_to_long(df, stubnames = pat)
     
-    df_t.to_csv(f"{output_dir}/transpose{COUNTER}.csv", index=False)
+    df.to_csv(f"{output_dir}/wide_to_long{COUNTER}.csv", index=False)
